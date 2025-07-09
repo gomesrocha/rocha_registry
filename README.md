@@ -1,36 +1,44 @@
 # Rocha Registry
 
-Um Registry compatível com a especificação [OCI Distribution Spac](https://github.com/opencontainers/distribution-spec) e compatível com o Docker Registry, implementado com **FastAPI**, **MinIO**, **PostgreSQL** e **Redis**.
+A lightweight, self-hosted container image registry compatible with the [OCI Distribution Spec](https://github.com/opencontainers/distribution-spec) and Docker Registry HTTP API V2.
 
-> 🚀 Projeto feito para uso interno seguro e escalável, com armazenamento distribuído e cache inteligente.
+Built with **FastAPI**, **MinIO**, **PostgreSQL**, and **Redis**, Rocha Registry is designed for secure, scalable, and distributed internal usage.
 
----
-
-## 🧩 Arquitetura
-
-- **FastAPI**: API HTTP principal (implementação da spec do Docker Registry).
-- **PostgreSQL**: Armazenamento de metadados (blobs, manifests, repositórios).
-- **MinIO**: Armazenamento dos blobs de imagens.
-- **Redis**: Cache para blobs acessados frequentemente.
-- **Docker Compose**: Orquestra os serviços para facilitar o deploy.
+> 🚀 Ideal for private environments requiring efficient blob storage and intelligent caching.
 
 ---
 
-## 📦 Funcionalidades
+## 🧩 Architecture
 
-- Upload e download de blobs (layers).
-- Armazenamento de manifests.
-- Suporte a múltiplos repositórios.
-- Cache de blobs com Redis.
-- Armazenamento de blobs no MinIO (compatível com S3).
-- Compatível com `docker push` e `docker pull`.
+- **FastAPI**: Main HTTP API implementing the Docker Registry specification.
+- **PostgreSQL**: Metadata storage (blobs, manifests, repositories).
+- **MinIO**: Object storage for image layers (S3-compatible).
+- **Redis**: In-memory caching for frequently accessed blobs.
+- **Docker Compose**: Container orchestration for local development and deployment.
 
 ---
 
-## 🚀 Como subir localmente
+## 📦 Features
 
-1. **Clone o repositório**:
+- Upload and download of blobs (image layers).
+- Manifest storage and retrieval.
+- Support for multiple repositories.
+- Redis-powered caching for blobs.
+- MinIO-based blob storage.
+- Fully compatible with `docker pull` and `docker push`.
+
+---
+
+## 🚀 Getting Started (Local Setup)
+
+1. **Clone the repository**:
 
 ```bash
-git clone https://github.com/seu-usuario/rocha_registry.git
+git clone https://github.com/your-username/rocha_registry.git
 cd rocha_registry
+
+docker compose up --build -d
+
+curl http://localhost:5000/v2/
+
+```
