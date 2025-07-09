@@ -5,7 +5,7 @@ from app.api import blobs, manifests, auth
 from app.db import engine
 import os
 
-app = FastAPI(title="OCI Registry", version="0.1.0")
+app = FastAPI(title="Rocha Registry - OCI Registry compatible", version="0.1.0")
 
 
 app.add_middleware(

@@ -1,4 +1,3 @@
-# app/models/manifest.py
 from sqlmodel import SQLModel, Field
 from datetime import datetime
 from typing import Optional

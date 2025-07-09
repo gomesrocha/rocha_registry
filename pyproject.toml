@@ -1,7 +1,7 @@
 [project]
 name = "rocha-registry"
 version = "0.1.0"
-description = "Add your description here"
+description = "A lightweight, self-hosted container image registry compatible with the OCI Distribution Spec and Docker Registry HTTP API V2."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

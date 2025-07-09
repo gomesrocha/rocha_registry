@@ -1,4 +1,3 @@
-# app/api/manifests.py
 from fastapi import APIRouter, Depends, Request, Response, HTTPException, Header
 from app.services.manifest_service import ManifestService
 from app.dependencies import get_manifest_service

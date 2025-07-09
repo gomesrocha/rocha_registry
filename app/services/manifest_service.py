@@ -1,4 +1,3 @@
-# app/services/manifest_service.py
 from minio import Minio
 from sqlmodel import Session
 from app.models.manifest import Manifest
