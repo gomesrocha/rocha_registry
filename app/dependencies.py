@@ -1,4 +1,3 @@
-# app/dependencies.py
 from fastapi import Depends
 from app.db import get_session
 from redis import Redis
@@ -8,7 +7,7 @@ from app.services.manifest_service import ManifestService
 from app.config import settings
 from sqlmodel import Session
 
-# Configurações do Redis e MinIO
+
 redis_client = Redis.from_url(settings.REDIS_URL, decode_responses=False)
 
 minio_client = Minio(

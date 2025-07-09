@@ -26,13 +26,12 @@ async def start_blob_upload(name: str, blob_service: BlobService = Depends(get_b
 async def commit_blob_upload(
     name: str,
     upload_id: str,
-    request: Request,  # <== Aqui!
+    request: Request,  
     digest: str = Query(...),
     blob_service: BlobService = Depends(get_blob_service)
 ):
-    data = await request.body()  # lê o corpo como bytes
+    data = await request.body()  
 
-    # Armazena no MinIO com o nome do digest (sem recalcular)
     blob_service.save_blob(digest, data)
 
     return Response(

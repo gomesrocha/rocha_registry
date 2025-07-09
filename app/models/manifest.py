@@ -12,6 +12,6 @@ class Manifest(SQLModel, table=True):
     size: int
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
-    # Adicione índices para melhor performance
+    
     class Config:
         indexes = ["name", "reference"]

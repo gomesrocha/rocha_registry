@@ -15,7 +15,6 @@ class BlobService:
         self.minio = minio_client
         self.bucket = os.getenv("MINIO_BUCKET", "registry")
         
-        # Cria o bucket se não existir
         try:
             if not self.minio.bucket_exists(self.bucket):
                 self.minio.make_bucket(self.bucket)
@@ -23,16 +22,16 @@ class BlobService:
             print(f"Error creating bucket: {e}")
 
     def create_upload_session(self, upload_id: str):
-        """Cria uma sessão de upload no Redis"""
+        """Function to create an upload session in Redis"""
         self.redis.hset(f"upload:{upload_id}", "chunks", "")
-        self.redis.expire(f"upload:{upload_id}", 3600)  # Expira em 1 hora
+        self.redis.expire(f"upload:{upload_id}", 3600)  
 
     async def upload_chunk(self, upload_id: str, data: bytes, content_range: str = None) -> str:
-        """Processa um chunk de upload e retorna o digest final"""
-        # Calcula o digest SHA256
+        """Upload chunk processing function with final digest return"""
+        
         digest = f"sha256:{hashlib.sha256(data).hexdigest()}"
         
-        # Armazena no MinIO
+        
         try:
             self.minio.put_object(
                 self.bucket,
@@ -44,7 +43,7 @@ class BlobService:
             print(f"Error uploading blob: {e}")
             raise
         
-        # Armazena metadados no PostgreSQL
+        
         blob = Blob(
             digest=digest,
             size=len(data),
@@ -60,7 +59,7 @@ class BlobService:
         self.minio.put_object(
             self.bucket,
             digest,
-            BytesIO(data),  # ✅ Wrapping com BytesIO
+            BytesIO(data), 
             length=len(data)
         )
         blob = Blob(
@@ -73,8 +72,8 @@ class BlobService:
 
 
     async def get_blob_info(self, digest: str) -> dict:
-        """Obtém informações sobre o blob sem baixar o conteúdo"""
-        # Verifica no Redis primeiro
+        """Asynchronous function to obtain information about the blob, without downloading the content"""
+        
         if self.redis.exists(f"blob_meta:{digest}"):
             size = self.redis.hget(f"blob_meta:{digest}", "size")
             media_type = self.redis.hget(f"blob_meta:{digest}", "media_type")
@@ -85,10 +84,10 @@ class BlobService:
                     "digest": digest
                 }
         
-        # Verifica no banco de dados
+        
         blob = self.session.query(Blob).filter(Blob.digest == digest).first()
         if blob:
-            # Atualiza o cache
+           
             self.redis.hset(f"blob_meta:{digest}", "size", str(blob.size))
             self.redis.hset(f"blob_meta:{digest}", "media_type", blob.media_type)
             return {
@@ -97,7 +96,7 @@ class BlobService:
                 "digest": digest
             }
         
-        # Verifica no MinIO
+        
         try:
             stat = self.minio.stat_object(self.bucket, digest)
             return {
@@ -118,14 +117,14 @@ class BlobService:
                     "data": cached_blob,
                     "media_type": media_type,
                     "size": len(cached_blob),
-                    "digest": digest  # ✅ necessário para o HEAD funcionar
+                    "digest": digest  
                 }
 
-            # Busca no MinIO
+            
             response = self.minio.get_object(self.bucket, digest)
             data = response.read()
 
-            # Armazena no Redis
+            
             self.redis.set(f"blob:{digest}", data, ex=3600)
 
             blob = self.session.query(Blob).filter(Blob.digest == digest).first()
@@ -137,7 +136,7 @@ class BlobService:
                 "data": data,
                 "media_type": media_type,
                 "size": len(data),
-                "digest": digest  # ✅ obrigatório
+                "digest": digest 
             }
         except S3Error as e:
             print(f"Error getting blob: {e}")

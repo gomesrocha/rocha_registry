@@ -18,13 +18,12 @@ async def put_manifest(
     )
 ):
     try:
-        # Lê o corpo da requisição
+
         manifest_data = await request.body()
         
-        # Calcula o digest
         digest = f"sha256:{hashlib.sha256(manifest_data).hexdigest()}"
         
-        # Salva o manifesto
+
         await manifest_service.save_manifest(
             name=name,
             reference=reference,

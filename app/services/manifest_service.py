@@ -2,7 +2,7 @@
 from minio import Minio
 from sqlmodel import Session
 from app.models.manifest import Manifest
-from io import BytesIO  # Adicione esta importação
+from io import BytesIO  
 import hashlib
 
 class ManifestService:
@@ -11,7 +11,7 @@ class ManifestService:
         self.minio = minio_client
         self.bucket = "registry"
         
-        # Garante que o bucket existe
+        
         self._ensure_bucket_exists()
     
     def _ensure_bucket_exists(self):
@@ -22,10 +22,10 @@ class ManifestService:
             print(f"Bucket verification error: {e}")
     
     async def save_manifest(self, name: str, reference: str, data: bytes, content_type: str, digest: str):
-        # Converte bytes para BytesIO para o MinIO
+        
         data_io = BytesIO(data)
         
-        # Armazena no MinIO
+        
         self.minio.put_object(
             self.bucket,
             f"manifests/{digest}",
@@ -34,7 +34,7 @@ class ManifestService:
             content_type=content_type
         )
         
-        # Armazena metadados no banco de dados
+        
         manifest = Manifest(
             name=name,
             reference=reference,
