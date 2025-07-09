@@ -34,7 +34,7 @@ Built with **FastAPI**, **MinIO**, **PostgreSQL**, and **Redis**, Rocha Registry
 1. **Clone the repository**:
 
 ```bash
-git clone https://github.com/your-username/rocha_registry.git
+git clone https://github.com/gomesrocha/rocha_registry.git
 cd rocha_registry
 
 docker compose up --build -d
