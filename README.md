@@ -1,6 +1,6 @@
 # Rocha Registry
 
-Um Docker Registry compatível com a especificação [Docker Registry HTTP API V2](https://docs.docker.com/registry/spec/api/), implementado com **FastAPI**, **MinIO**, **PostgreSQL** e **Redis**.
+Um OCI Registry compatível com a especificação [OCI Distribution Spac](https://github.com/opencontainers/distribution-spec) e compatível com o Docker Registry, implementado com **FastAPI**, **MinIO**, **PostgreSQL** e **Redis**.
 
 > 🚀 Projeto feito para uso interno seguro e escalável, com armazenamento distribuído e cache inteligente.
 
