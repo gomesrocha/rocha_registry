@@ -1,6 +1,6 @@
 from sqlmodel import Session
 from minio import Minio
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import concurrent.futures
 from app.models.blob import Blob
 from app.models.manifest import Manifest
@@ -40,12 +40,12 @@ class GarbageCollector:
         for blob in all_blobs:
             if blob.digest not in referenced_blobs:
                 blob.unreferenced = True
-                blob.marked_unreferenced_at = datetime.utcnow()
+                blob.marked_unreferenced_at = datetime.now(timezone.utc)
         
         self.session.commit()
     
     def delete_marked_blobs(self, older_than_days: int = 7):
-        cutoff = datetime.utcnow() - timedelta(days=older_than_days)
+        cutoff = datetime.now(timezone.utc) - timedelta(days=older_than_days)
         
         
         blobs_to_delete = self.session.query(Blob).filter(

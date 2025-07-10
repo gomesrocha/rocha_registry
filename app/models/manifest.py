@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, Field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 class Manifest(SQLModel, table=True):
@@ -9,7 +9,7 @@ class Manifest(SQLModel, table=True):
     digest: str = Field(index=True)
     content_type: str
     size: int
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
     
     
     class Config:
