@@ -5,8 +5,12 @@ from fastapi.responses import Response
 from app.services.blob_service import BlobService
 from app.dependencies import get_blob_service
 import uuid
+import logging
 
 router = APIRouter()
+
+logger = logging.getLogger(__name__)
+
 
 @router.post("/{name:path}/blobs/uploads/")
 async def start_blob_upload(name: str, blob_service: BlobService = Depends(get_blob_service)):
@@ -30,6 +34,7 @@ async def commit_blob_upload(
     digest: str = Query(...),
     blob_service: BlobService = Depends(get_blob_service)
 ):
+    logger.info(f"Commit blob for blobs id {upload_id} in repository '{name}'")
     data = await request.body()  
 
     blob_service.save_blob(digest, data)
@@ -72,6 +77,7 @@ async def get_blob(
     digest: str,
     blob_service: BlobService = Depends(get_blob_service)
 ):
+    logger.info(f"GET Blob request for {digest} in repository '{name}'")
     blob_data = await blob_service.get_blob(digest)
     if not blob_data:
         raise HTTPException(status_code=404, detail="Blob not found")
@@ -88,7 +94,7 @@ async def head_blob(
     digest: str, 
     blob_service: BlobService = Depends(get_blob_service)
 ):
-    # Verifica se o blob existe
+    logger.info(f"HEAD request for blob {digest} in repository '{name}'")    
     try:
         blob_info = await blob_service.get_blob_info(digest)
         if not blob_info:
