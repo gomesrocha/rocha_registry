@@ -7,6 +7,12 @@ import hashlib
 from datetime import datetime
 import os
 from io import BytesIO
+import logging
+
+
+
+logger = logging.getLogger(__name__)
+
 
 class BlobService:
     def __init__(self, session: Session, redis: Redis, minio_client: Minio):
@@ -27,8 +33,9 @@ class BlobService:
         self.redis.expire(f"upload:{upload_id}", 3600)  
 
     async def upload_chunk(self, upload_id: str, data: bytes, content_range: str = None) -> str:
-        """Upload chunk processing function with final digest return"""
-        
+
+        logger.info(f"UPLOAD chunl for {upload_id} and content '{content_range:}'")   
+
         digest = f"sha256:{hashlib.sha256(data).hexdigest()}"
         
         

@@ -109,4 +109,5 @@ async def head_blob(
             }
         )
     except Exception as e:
+        logger.info(f"Exception {e} ")
         raise HTTPException(status_code=404)
