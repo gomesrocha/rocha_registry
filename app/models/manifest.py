@@ -9,7 +9,7 @@ class Manifest(SQLModel, table=True):
     digest: str = Field(index=True)
     content_type: str
     size: int
-    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
     
     class Config:
